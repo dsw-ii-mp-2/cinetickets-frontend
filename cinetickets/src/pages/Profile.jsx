@@ -12,6 +12,8 @@ export default function Profile() {
     navigate("/");
   };
 
+  const [purchaseHistory, setPurchaseHistory] = useState([]);
+
   // Datos del usuario (inicialmente vacíos)
   const [userData, setUserData] = useState({
     name: "",
@@ -29,10 +31,11 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Cargar datos del usuario al montar el componente
-  useEffect(() => {
+    // Cargar datos del usuario y historial de compras al montar el componente
+    useEffect(() => {
     fetchUserData();
-  }, []);
+    fetchPurchaseHistory();
+    }, []);
 
   const fetchUserData = async () => {
     try {
@@ -102,36 +105,30 @@ export default function Profile() {
     }
   };
 
-  // Historial de compras simulado
-  const purchaseHistory = [
-    {
-      id: 1,
-      movie: "AVATAR",
-      date: "10-Nov-2024",
-      time: "7:00 PM",
-      seats: ["A5", "A6"],
-      total: 28000,
-      status: "Completada"
-    },
-    {
-      id: 2,
-      movie: "TRON: ARES",
-      date: "05-Nov-2024",
-      time: "4:30 PM",
-      seats: ["B3", "B4"],
-      total: 28000,
-      status: "Completada"
-    },
-    {
-      id: 3,
-      movie: "EL CONJURO 4",
-      date: "28-Oct-2024",
-      time: "9:30 PM",
-      seats: ["C7"],
-      total: 14000,
-      status: "Completada"
-    }
-  ];
+    const fetchPurchaseHistory = async () => {
+    try {
+        const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+        if (!token) return;
+
+        const response = await fetch('https://cinetickets-backend-glcg.onrender.com/api/tickets/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json',
+        },
+        });
+
+        if (response.ok) {
+        const data = await response.json();
+        setPurchaseHistory(data.results || []);  // handle pagination
+        } else {
+        console.error('Error al cargar el historial de compras');
+        setPurchaseHistory([]);
+        }
+    } catch (error) {
+        console.error('Error de conexión al cargar compras:', error);
+        setPurchaseHistory([]);
+    }}
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -444,38 +441,35 @@ export default function Profile() {
                 </h3>
                 
                 <div className="space-y-4">
-                  {purchaseHistory.map(purchase => (
-                    <div key={purchase.id} className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#D4AF37]/30 transition-all duration-300">
-                      <div className="flex justify-between items-start">
+                    {purchaseHistory.map(ticket => (
+                    <div key={ticket.id} className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#D4AF37]/30 transition-all duration-300">
+                        <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <h4 className="text-white font-bold text-lg mb-2" style={{ fontFamily: "'Hug Me Tight', cursive" }}>
-                            {purchase.movie}
-                          </h4>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <h4 className="text-white font-bold text-lg mb-2" style={{ fontFamily: "'Hug Me Tight', cursive" }}>
+                            🎬 {ticket.movie}
+                            </h4>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                             <div>
-                              <span className="text-gray-400">Fecha:</span>
-                              <p className="text-white font-medium">{purchase.date}</p>
+                                <span className="text-gray-400">Fecha:</span>
+                                <p className="text-white font-medium">{new Date(ticket.function).toLocaleDateString()}</p>
                             </div>
                             <div>
-                              <span className="text-gray-400">Horario:</span>
-                              <p className="text-white font-medium">{purchase.time}</p>
+                                <span className="text-gray-400">Hora:</span>
+                                <p className="text-white font-medium">{new Date(ticket.function).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                             </div>
                             <div>
-                              <span className="text-gray-400">Asientos:</span>
-                              <p className="text-white font-medium">{purchase.seats.join(', ')}</p>
+                                <span className="text-gray-400">Asiento:</span>
+                                <p className="text-white font-medium">{ticket.seat}</p>
                             </div>
                             <div>
-                              <span className="text-gray-400">Total:</span>
-                              <p className="text-[#D4AF37] font-bold">${purchase.total.toLocaleString('es-CO')}</p>
+                                <span className="text-gray-400">Estado:</span>
+                                <p className="text-green-400 font-bold">Completada</p>
                             </div>
-                          </div>
+                            </div>
                         </div>
-                        <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-medium border border-green-500/30">
-                          {purchase.status}
-                        </span>
-                      </div>
+                        </div>
                     </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>

@@ -103,6 +103,8 @@ export default function Register() {
     }
   };
 
+
+
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-[#1a0a0a] to-[#8B0000] relative overflow-hidden">
       {/* Patrón de textura sutil */}
@@ -270,7 +272,7 @@ export default function Register() {
                   </div>
                   <input
                     type="number"
-                    name="edad"
+                    name="age"
                     value={formData.age}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-4 rounded-2xl text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#D4AF37] focus:ring-opacity-30 border-2 border-transparent focus:border-[#D4AF37] bg-white/5 backdrop-blur-sm placeholder-gray-400"
@@ -297,7 +299,7 @@ export default function Register() {
                   </div>
                   <input
                     type="tel"
-                    name="telefono"
+                    name="telephone"
                     value={formData.telephone}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-4 rounded-2xl text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#D4AF37] focus:ring-opacity-30 border-2 border-transparent focus:border-[#D4AF37] bg-white/5 backdrop-blur-sm placeholder-gray-400"
