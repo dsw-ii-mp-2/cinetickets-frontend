@@ -8,8 +8,8 @@ export default function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    edad: '',
-    telefono: '',
+    age: '',
+    telephone: '',
     aceptarTerminos: false
   });
 
@@ -47,13 +47,13 @@ export default function Register() {
     }
     
     // Validar edad
-    if (!formData.edad || formData.edad < 13 || formData.edad > 120) {
+    if (!formData.age || formData.age < 13 || formData.age > 120) {
       setError('La edad debe ser entre 13 y 120 años');
       return;
     }
 
     // Validar teléfono
-    if (!formData.telefono || formData.telefono.length < 8) {
+    if (!formData.telephone || formData.telephone.length < 8) {
       setError('El número telefónico debe tener al menos 8 dígitos');
       return;
     }
@@ -78,8 +78,8 @@ export default function Register() {
           password: formData.password,
           first_name: formData.nombre,
           last_name: formData.apellido,
-          age: formData.edad,
-          phone: formData.telefono
+          age: formData.age,
+          telephone: formData.telephone
         })
       });
 
@@ -271,7 +271,7 @@ export default function Register() {
                   <input
                     type="number"
                     name="edad"
-                    value={formData.edad}
+                    value={formData.age}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-4 rounded-2xl text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#D4AF37] focus:ring-opacity-30 border-2 border-transparent focus:border-[#D4AF37] bg-white/5 backdrop-blur-sm placeholder-gray-400"
                     placeholder="18"
@@ -298,7 +298,7 @@ export default function Register() {
                   <input
                     type="tel"
                     name="telefono"
-                    value={formData.telefono}
+                    value={formData.telephone}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-4 rounded-2xl text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#D4AF37] focus:ring-opacity-30 border-2 border-transparent focus:border-[#D4AF37] bg-white/5 backdrop-blur-sm placeholder-gray-400"
                     placeholder="123456789"

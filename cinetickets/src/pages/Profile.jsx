@@ -56,12 +56,12 @@ export default function Profile() {
         const data = await response.json();
         // Formatear los datos según la respuesta de tu API
         setUserData({
-          name: `${data.first_name || ''} ${data.last_name || ''}`.trim() || "Ana García",
-          email: data.email || "ana.garcia@email.com",
-          telephone: data.telephone || data.phone || "+57 300 123 4567",
-          age: data.age || "30",
+          name: `${data.first_name || ''} ${data.last_name || ''}`.trim(),
+          email: data.email,
+          telephone: data.telephone,
+          age: data.age,
           membership: "Premium",
-          joinDate: data.date_joined ? new Date(data.date_joined).toLocaleDateString('es-ES', { 
+          joinDate: data.created_at ? new Date(data.created_at).toLocaleDateString('es-ES', {
             day: 'numeric', 
             month: 'short', 
             year: 'numeric' 
